@@ -1,0 +1,4 @@
+#http://shanesbrain.net/2008/7/9/using-xcode-with-git
+
+#treat Xcode project file as a binary
+*.pbxproj -crlf -diff -merge

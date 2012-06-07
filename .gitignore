@@ -1,0 +1,18 @@
+#http://shanesbrain.net/2008/7/9/using-xcode-with-git
+
+#ignore Xcode bullshit
+build/*
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspective
+*.perspectivev3
+*~.nib
+
+#Xcode 4 bullshit
+xcuserdata
+project.xcworkspace
+
+# OS X Bullshit
+.DS_Store
+profile
