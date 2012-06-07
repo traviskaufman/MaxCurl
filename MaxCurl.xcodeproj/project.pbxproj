@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		22CF114E0EE9A6A70054F513 /* MaxCurl.c in Sources */ = {isa = PBXBuildFile; fileRef = 22CF114D0EE9A6A70054F513 /* MaxCurl.c */; };
+		C9432D3315805D6100150991 /* MaxCurl.h in Headers */ = {isa = PBXBuildFile; fileRef = C9432D3215805D6100150991 /* MaxCurl.h */; };
 		C9A08D8114094AEF009FF560 /* MaxAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9A08D8014094AEF009FF560 /* MaxAPI.framework */; };
 		C9A08DC714094AF8009FF560 /* commonsyms.c in Sources */ = {isa = PBXBuildFile; fileRef = C9A08DC614094AF8009FF560 /* commonsyms.c */; };
 /* End PBXBuildFile section */
@@ -15,6 +16,7 @@
 /* Begin PBXFileReference section */
 		22CF10220EE984600054F513 /* maxmspsdk.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = maxmspsdk.xcconfig; path = ../maxmspsdk.xcconfig; sourceTree = SOURCE_ROOT; };
 		22CF114D0EE9A6A70054F513 /* MaxCurl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = MaxCurl.c; sourceTree = "<group>"; };
+		C9432D3215805D6100150991 /* MaxCurl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MaxCurl.h; sourceTree = "<group>"; };
 		C94A6608140960360093F454 /* MaxCurl.mxo */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MaxCurl.mxo; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9A08D8014094AEF009FF560 /* MaxAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MaxAPI.framework; path = "/Users/traviskaufman/Documents/Code/MaxExternals/c74support/max-includes/MaxAPI.framework"; sourceTree = "<absolute>"; };
 		C9A08DC614094AF8009FF560 /* commonsyms.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = commonsyms.c; path = "/Users/traviskaufman/Documents/Code/MaxExternals/c74support/max-includes/common/commonsyms.c"; sourceTree = "<absolute>"; };
@@ -56,6 +58,7 @@
 			isa = PBXGroup;
 			children = (
 				22CF114D0EE9A6A70054F513 /* MaxCurl.c */,
+				C9432D3215805D6100150991 /* MaxCurl.h */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -75,6 +78,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9432D3315805D6100150991 /* MaxCurl.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
