@@ -30,7 +30,7 @@ typedef struct _maxcurl {
 /**
  * Constructor
  */
-void* maxcurl_new(t_atom *url);
+void* maxcurl_new(char* url);
 
 /**
  * Destructor
@@ -44,7 +44,7 @@ void maxcurl_free();
  *    The url for which you would like to get data from
  *
  */
-const char* _maxcurl_doCurl(const char *url);                            
+char* _maxcurl_doCurl(char* url);                            
 
 /**
  * React to "bang" message from MaxMSP client
@@ -56,6 +56,6 @@ void maxcurl_bang(t_maxcurl *mxcrl);
 
 // TODO: Dox!
 size_t _maxcurl_callback(char* data, size_t size, size_t nmemb, 
-                         void *userdata);
+                         char* userdata);
 
 #endif
