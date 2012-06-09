@@ -13,7 +13,7 @@ static t_class *s_maxcurl_class;
 CURL *curl = NULL;
 CURLcode resp = 0;
 const int CURL_SUCCESS = 0;
-char *curl_result_buffer = NULL;
+tkstring curl_result_buffer;
 char *curl_error_buffer = NULL;
 const bool DEBUG = TRUE;
 
@@ -35,6 +35,7 @@ void *maxcurl_new(char* url) {
 	maxcurl_proto->m_url = url;
   maxcurl_proto->m_outlet = outlet_new(maxcurl_proto, NULL);
   curl_global_init(CURL_GLOBAL_ALL);
+  tkstring_new(&curl_result_buffer);
   // TODO: Refactor curl stuff
   
 	return maxcurl_proto;
@@ -65,22 +66,24 @@ char* _maxcurl_doCurl(char *url) {
   resp = curl_easy_perform(curl);
   curl_easy_cleanup(curl);
   if (resp == CURL_SUCCESS) {
-    return curl_result_buffer;
+    return curl_result_buffer.buffer;
   }// TODO: Errorbuffer
   return curl_error_buffer;
 }
 
-size_t _maxcurl_callback(char* data, size_t size, size_t nmemb, 
-                         char* userdata) {
-  size_t new_size = 
-  if (DEBUG)
-    post("userdata: %s", userdata);
-  if (userdata) {
-    realloc(userdata, (sizeof(userdata))+(size*nmemb)+1);
-    strcat(userdata, data);
+size_t _maxcurl_callback(void* data, size_t size, size_t nmemb, 
+                         tkstring* userdata) {
+  size_t new_size = userdata->size + (size*nmemb);
+  userdata->buffer = realloc(userdata->buffer, new_size+1);
+  memcpy(userdata->buffer+userdata->size, data, size*nmemb);
+  userdata->buffer[new_size] = '\0';
+  userdata->size = new_size;
+  if (DEBUG) {
+    if (data)
+      post("data: %s", data);
+    if (userdata)
+      post("userdata: %s", userdata->buffer);
   }
-  else
-    userdata = data;
   return size*nmemb;
 }
 
@@ -96,4 +99,10 @@ void maxcurl_bang(t_maxcurl *x) {
   t_atom outlet_data;
   atom_setsym(&outlet_data, mc_curl_result);
   outlet_anything(x->m_outlet, gensym("curlresult"), 1, &outlet_data);*/
+}
+
+void tkstring_new(tkstring *s) {
+  s->size = 0;
+  s->buffer = malloc(s->size+1);
+  s->buffer[0] = '\0';
 }

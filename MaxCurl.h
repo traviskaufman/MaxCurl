@@ -25,6 +25,15 @@ typedef struct _maxcurl {
   void *m_outlet; // MaxMSP Outlet
 } t_maxcurl;
 
+// "String" struct for cURL
+typedef struct __s {
+  char* buffer;
+  size_t size;
+} tkstring;
+
+// "String intialization" method
+void tkstring_new(tkstring* s);
+
 /////// Methods ///////
 
 /**
@@ -55,7 +64,7 @@ char* _maxcurl_doCurl(char* url);
 void maxcurl_bang(t_maxcurl *mxcrl);
 
 // TODO: Dox!
-size_t _maxcurl_callback(char* data, size_t size, size_t nmemb, 
-                         char* userdata);
+size_t _maxcurl_callback(void* data, size_t size, size_t nmemb, 
+                         tkstring* userdata);
 
 #endif
