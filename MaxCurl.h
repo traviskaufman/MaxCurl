@@ -15,19 +15,26 @@
 #include "ext.h"
 #include "ext_obex.h"
 
-/*** MaxCurl Object Interface ***/
+/////// MaxCurl Object Interface ///////
 
 // The MaxCurl "Class" Struct
 typedef struct _maxcurl {
 	t_object s_obj; // t_object header
-	char *url; // URL that will be cURL'd
+	char *m_url; // URL that will be cURL'd
+  void *m_outlet; // MaxMSP Outlet
 } t_maxcurl;
 
-/*** Methods (See Implementation file for DocStrings) ***/
+/////// Methods ///////
+
 /**
  * Constructor
  */
-void* maxcurl_new();
+void* maxcurl_new(t_atom *url);
+
+/**
+ * Destructor
+ */
+void maxcurl_free();
 
 /**
  * Performs a cURL and returns the data from the page
@@ -52,4 +59,5 @@ const char* _maxcurl_doCurl(const char *url,
  *    The MaxCurl object instance 
  */
 void maxcurl_bang(t_maxcurl *mxcrl);
+
 #endif
