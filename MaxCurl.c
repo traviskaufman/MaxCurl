@@ -57,7 +57,7 @@ char* _maxcurl_doCurl(char *url) {
   resp = curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, _maxcurl_callback);
   if (resp != CURLE_OK)
     error("Curl error %d", resp);
-  resp = curl_easy_setopt(curl, CURLOPT_WRITEDATA, curl_result_buffer);
+  resp = curl_easy_setopt(curl, CURLOPT_WRITEDATA, &curl_result_buffer);
   if (resp != CURLE_OK)
     error("Curl error %d", resp);
   resp = curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, curl_error_buffer);
