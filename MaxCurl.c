@@ -43,6 +43,8 @@ void *maxcurl_new(char* url) {
 
 void maxcurl_free() {
   curl_global_cleanup();
+  free(curl_result_buffer.buffer);
+  free(&curl_result_buffer);
 }
 
 char* _maxcurl_doCurl(char *url) {
@@ -95,10 +97,17 @@ void maxcurl_bang(t_maxcurl *x) {
   if (DEBUG) {
     post("crlRes: %s", crlRes);
   }
-  /*t_symbol* mc_curl_result = gensym(crlRes);
-  t_atom outlet_data;
-  atom_setsym(&outlet_data, mc_curl_result);
-  outlet_anything(x->m_outlet, gensym("curlresult"), 1, &outlet_data);*/
+  t_atom outlet_data[1];
+  t_max_err setsym_result = atom_setsym(outlet_data, gensym(crlRes));
+  if (setsym_result == MAX_ERR_NONE) {
+    if (DEBUG) {
+      post("No atom_setsym errors");
+    }
+    outlet_anything(x->m_outlet, gensym("curlresult"), 1, outlet_data);
+  }
+  else {
+    error("%s", setsym_result);
+  }
 }
 
 void tkstring_new(tkstring *s) {
