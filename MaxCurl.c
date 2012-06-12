@@ -21,7 +21,7 @@ int main() {
 	t_class *c = NULL;
 	
 	c = class_new("MaxCurl", (method)maxcurl_new, (method)maxcurl_free, 
-                sizeof(t_maxcurl), 0L, 0);
+                sizeof(t_maxcurl), 0L, A_DEFSYM, 0);
 	class_addmethod(c, (method)maxcurl_bang, "bang", 0);
 	
   // allows the class to be searched when a user types it into the box
@@ -30,9 +30,10 @@ int main() {
 	return EXIT_SUCCESS;
 }
 
-void *maxcurl_new(char* url) {
+void *maxcurl_new(t_symbol* url) {
+  post("URL: %s", url->s_name);
   t_maxcurl *maxcurl_proto = (t_maxcurl *)object_alloc(s_maxcurl_class);
-	maxcurl_proto->m_url = url;
+	maxcurl_proto->m_url = url->s_name;
   maxcurl_proto->m_outlet = outlet_new(maxcurl_proto, NULL);
   curl_global_init(CURL_GLOBAL_ALL);
   tkstring_new(&curl_result_buffer);
@@ -90,10 +91,16 @@ size_t _maxcurl_callback(void* data, size_t size, size_t nmemb,
 }
 
 void maxcurl_bang(t_maxcurl *x) {
+  if (x->is_curling) {
+    error("Error: cURL operation in progress");
+    return;
+  }
   if (DEBUG) {
     post("Requested url: %s", x->m_url);
   }
-  char* crlRes = _maxcurl_doCurl("http://www.google.com");
+  x->is_curling = TRUE;
+  char* crlRes = _maxcurl_doCurl(x->m_url);
+  x->is_curling = FALSE;
   if (DEBUG) {
     post("crlRes: %s", crlRes);
   }

@@ -22,6 +22,7 @@
 typedef struct _maxcurl {
 	t_object s_obj; // t_object header
 	char *m_url; // URL that will be cURL'd
+  bool is_curling; // whether or not a cURL operation is taking place
   void *m_outlet; // MaxMSP Outlet
 } t_maxcurl;
 
@@ -39,7 +40,7 @@ void tkstring_new(tkstring* s);
 /**
  * Constructor
  */
-void* maxcurl_new(char* url);
+void* maxcurl_new(t_symbol* url);
 
 /**
  * Destructor
