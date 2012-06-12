@@ -10,7 +10,8 @@
 		22CF114E0EE9A6A70054F513 /* MaxCurl.c in Sources */ = {isa = PBXBuildFile; fileRef = 22CF114D0EE9A6A70054F513 /* MaxCurl.c */; };
 		C9432D3315805D6100150991 /* MaxCurl.h in Headers */ = {isa = PBXBuildFile; fileRef = C9432D3215805D6100150991 /* MaxCurl.h */; };
 		C9432D411582E2AF00150991 /* libcurl.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C9432D401582E2AF00150991 /* libcurl.3.dylib */; };
-		C99257FA1583E70800E64068 /* string.h in Headers */ = {isa = PBXBuildFile; fileRef = C99257F91583E70800E64068 /* string.h */; };
+		C99257FC1587018800E64068 /* mc_curl_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = C99257FB1587018800E64068 /* mc_curl_utils.h */; };
+		C99257FE1587063A00E64068 /* mc_curl_utils.c in Sources */ = {isa = PBXBuildFile; fileRef = C99257FD1587063A00E64068 /* mc_curl_utils.c */; };
 		C9A08D8114094AEF009FF560 /* MaxAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9A08D8014094AEF009FF560 /* MaxAPI.framework */; };
 		C9A08DC714094AF8009FF560 /* commonsyms.c in Sources */ = {isa = PBXBuildFile; fileRef = C9A08DC614094AF8009FF560 /* commonsyms.c */; };
 /* End PBXBuildFile section */
@@ -21,7 +22,8 @@
 		C9432D3215805D6100150991 /* MaxCurl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MaxCurl.h; sourceTree = "<group>"; };
 		C9432D401582E2AF00150991 /* libcurl.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcurl.3.dylib; path = "../../../../../../../Developer-3.2/SDKs/MacOSX10.4u.sdk/usr/lib/libcurl.3.dylib"; sourceTree = "<group>"; };
 		C94A6608140960360093F454 /* MaxCurl.mxo */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MaxCurl.mxo; sourceTree = BUILT_PRODUCTS_DIR; };
-		C99257F91583E70800E64068 /* string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = string.h; path = "../../../../../../../Developer-3.2/SDKs/MacOSX10.6.sdk/usr/include/string.h"; sourceTree = "<group>"; };
+		C99257FB1587018800E64068 /* mc_curl_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mc_curl_utils.h; sourceTree = "<group>"; };
+		C99257FD1587063A00E64068 /* mc_curl_utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mc_curl_utils.c; sourceTree = "<group>"; };
 		C9A08D8014094AEF009FF560 /* MaxAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MaxAPI.framework; path = "/Users/traviskaufman/Documents/Code/MaxExternals/c74support/max-includes/MaxAPI.framework"; sourceTree = "<absolute>"; };
 		C9A08DC614094AF8009FF560 /* commonsyms.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = commonsyms.c; path = "/Users/traviskaufman/Documents/Code/MaxExternals/c74support/max-includes/common/commonsyms.c"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
@@ -55,7 +57,6 @@
 			isa = PBXGroup;
 			children = (
 				C9432D401582E2AF00150991 /* libcurl.3.dylib */,
-				C99257F91583E70800E64068 /* string.h */,
 				C9A08D8014094AEF009FF560 /* MaxAPI.framework */,
 			);
 			name = "External Frameworks and Libraries";
@@ -65,6 +66,8 @@
 			isa = PBXGroup;
 			children = (
 				22CF114D0EE9A6A70054F513 /* MaxCurl.c */,
+				C99257FB1587018800E64068 /* mc_curl_utils.h */,
+				C99257FD1587063A00E64068 /* mc_curl_utils.c */,
 				C9432D3215805D6100150991 /* MaxCurl.h */,
 			);
 			name = Source;
@@ -86,7 +89,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9432D3315805D6100150991 /* MaxCurl.h in Headers */,
-				C99257FA1583E70800E64068 /* string.h in Headers */,
+				C99257FC1587018800E64068 /* mc_curl_utils.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -166,6 +169,7 @@
 			files = (
 				22CF114E0EE9A6A70054F513 /* MaxCurl.c in Sources */,
 				C9A08DC714094AF8009FF560 /* commonsyms.c in Sources */,
+				C99257FE1587063A00E64068 /* mc_curl_utils.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

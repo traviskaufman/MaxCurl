@@ -31,13 +31,14 @@ int main() {
 }
 
 void *maxcurl_new(t_symbol* url) {
-  post("URL: %s", url->s_name);
+  if (DEBUG) {
+    post("URL: %s", url->s_name);
+  }
   t_maxcurl *maxcurl_proto = (t_maxcurl *)object_alloc(s_maxcurl_class);
 	maxcurl_proto->m_url = url->s_name;
   maxcurl_proto->m_outlet = outlet_new(maxcurl_proto, NULL);
   curl_global_init(CURL_GLOBAL_ALL);
   t_curl_databuffer_new(&curl_result_buffer);
-  // TODO: Refactor curl stuff
   
 	return maxcurl_proto;
 }
@@ -49,45 +50,17 @@ void maxcurl_free() {
 }
 
 char* _maxcurl_doCurl(char *url) {
-  curl = curl_easy_init();
-  if (!curl) {
-    error("cURL Error: Could not set up cURL client");
-  }
-  
-  resp = curl_easy_setopt(curl, CURLOPT_URL, url);
-  if (resp != CURLE_OK)
-    error("Curl error %d: %s", resp, curl_error_buffer);
-  resp = curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, _maxcurl_callback);
-  if (resp != CURLE_OK)
-    error("Curl error %d: %s", resp, curl_error_buffer);
-  resp = curl_easy_setopt(curl, CURLOPT_WRITEDATA, &curl_result_buffer);
-  if (resp != CURLE_OK)
-    error("Curl error %d: %s", resp, curl_error_buffer);
-  resp = curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, curl_error_buffer);
-  if (resp != CURLE_OK)
-    error("Curl error %d: %s", resp, curl_error_buffer);
+  _maxcurl_curl_easy_bootstrap(curl, 
+                               &resp,
+                               url, 
+                               &curl_result_buffer, 
+                               curl_error_buffer);
   resp = curl_easy_perform(curl);
   curl_easy_cleanup(curl);
   if (resp == CURL_SUCCESS) {
     return curl_result_buffer.buffer;
   }
   return NULL;
-}
-
-size_t _maxcurl_callback(void* data, size_t size, size_t nmemb, 
-                         t_curl_databuffer* userdata) {
-  size_t new_size = userdata->size + (size*nmemb);
-  userdata->buffer = realloc(userdata->buffer, new_size+1);
-  memcpy(userdata->buffer+userdata->size, data, size*nmemb);
-  userdata->buffer[new_size] = '\0';
-  userdata->size = new_size;
-  if (DEBUG) {
-    if (data)
-      post("data: %s", data);
-    if (userdata)
-      post("userdata: %s", userdata->buffer);
-  }
-  return size*nmemb;
 }
 
 void maxcurl_bang(t_maxcurl *x) {
@@ -118,10 +91,4 @@ void maxcurl_bang(t_maxcurl *x) {
   else {
     error("%s", setsym_result);
   }
-}
-
-void t_curl_databuffer_new(t_curl_databuffer *s) {
-  s->size = 0;
-  s->buffer = malloc(s->size+1);
-  s->buffer[0] = '\0';
 }
