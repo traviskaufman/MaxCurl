@@ -53,6 +53,9 @@ void maxcurl_free();
  * @param const char *url
  *    The url for which you would like to get data from
  *
+ * @return char*
+ *    Returns all of the bulk data retrieved from the cURL request, or NULL
+ *    if the request was unsuccessful
  */
 char* _maxcurl_doCurl(char* url);                            
 
