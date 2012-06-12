@@ -13,7 +13,7 @@ static t_class *s_maxcurl_class;
 CURL *curl = NULL;
 CURLcode resp = 0;
 const int CURL_SUCCESS = 0;
-tkstring curl_result_buffer;
+t_curl_databuffer curl_result_buffer;
 char *curl_error_buffer = NULL;
 const bool DEBUG = TRUE;
 
@@ -36,7 +36,7 @@ void *maxcurl_new(t_symbol* url) {
 	maxcurl_proto->m_url = url->s_name;
   maxcurl_proto->m_outlet = outlet_new(maxcurl_proto, NULL);
   curl_global_init(CURL_GLOBAL_ALL);
-  tkstring_new(&curl_result_buffer);
+  t_curl_databuffer_new(&curl_result_buffer);
   // TODO: Refactor curl stuff
   
 	return maxcurl_proto;
@@ -75,7 +75,7 @@ char* _maxcurl_doCurl(char *url) {
 }
 
 size_t _maxcurl_callback(void* data, size_t size, size_t nmemb, 
-                         tkstring* userdata) {
+                         t_curl_databuffer* userdata) {
   size_t new_size = userdata->size + (size*nmemb);
   userdata->buffer = realloc(userdata->buffer, new_size+1);
   memcpy(userdata->buffer+userdata->size, data, size*nmemb);
@@ -119,7 +119,7 @@ void maxcurl_bang(t_maxcurl *x) {
   }
 }
 
-void tkstring_new(tkstring *s) {
+void t_curl_databuffer_new(t_curl_databuffer *s) {
   s->size = 0;
   s->buffer = malloc(s->size+1);
   s->buffer[0] = '\0';

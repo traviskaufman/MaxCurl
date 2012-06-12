@@ -30,10 +30,10 @@ typedef struct _maxcurl {
 typedef struct __s {
   char* buffer;
   size_t size;
-} tkstring;
+} t_curl_databuffer;
 
 // "String intialization" method
-void tkstring_new(tkstring* s);
+void t_curl_databuffer_new(t_curl_databuffer* s);
 
 /////// Methods ///////
 
@@ -66,6 +66,6 @@ void maxcurl_bang(t_maxcurl *mxcrl);
 
 // TODO: Dox!
 size_t _maxcurl_callback(void* data, size_t size, size_t nmemb, 
-                         tkstring* userdata);
+                         t_curl_databuffer* userdata);
 
 #endif
