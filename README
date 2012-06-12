@@ -1,3 +1,11 @@
 ******* MAXCURL: Data retrieval client for MaxMSP ********
 
-I suck at READMEs.....Dox soon!
+ERRBODY cURL!
+
+MaxCurl is a cURL client built for MaxMSP (built in 5, but should work in 6 as well. Its aim is to be cross-platform, non-blocking (multi-threaded), and able to easily transmit info from the web right into your Max Patch; all you need is an internet connection! 
+
+This external is still in its alpha stage; very buggy, messy, and single-threaded, but in the future it will be not very buggy, very clean and modular, and multi-threaded!
+
+Please clone/dl it and report any issues to me! 
+
+<3 Travis
