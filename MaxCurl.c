@@ -56,22 +56,22 @@ char* _maxcurl_doCurl(char *url) {
   
   resp = curl_easy_setopt(curl, CURLOPT_URL, url);
   if (resp != CURLE_OK)
-    error("Curl error %d", resp);
+    error("Curl error %d: %s", resp, curl_error_buffer);
   resp = curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, _maxcurl_callback);
   if (resp != CURLE_OK)
-    error("Curl error %d", resp);
+    error("Curl error %d: %s", resp, curl_error_buffer);
   resp = curl_easy_setopt(curl, CURLOPT_WRITEDATA, &curl_result_buffer);
   if (resp != CURLE_OK)
-    error("Curl error %d", resp);
+    error("Curl error %d: %s", resp, curl_error_buffer);
   resp = curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, curl_error_buffer);
   if (resp != CURLE_OK)
-    error("Curl error %d", resp);
+    error("Curl error %d: %s", resp, curl_error_buffer);
   resp = curl_easy_perform(curl);
   curl_easy_cleanup(curl);
   if (resp == CURL_SUCCESS) {
     return curl_result_buffer.buffer;
-  }// TODO: Errorbuffer
-  return curl_error_buffer;
+  }
+  return NULL;
 }
 
 size_t _maxcurl_callback(void* data, size_t size, size_t nmemb, 
@@ -105,7 +105,9 @@ void maxcurl_bang(t_maxcurl *x) {
     post("crlRes: %s", crlRes);
   }
   t_atom outlet_data[1];
-  t_max_err setsym_result = atom_setsym(outlet_data, gensym(crlRes));
+  t_max_err setsym_result = (crlRes != NULL) ? 
+                        atom_setsym(outlet_data, gensym(crlRes)) : 
+                        atom_setsym(outlet_data, gensym(curl_error_buffer));
   if (setsym_result == MAX_ERR_NONE) {
     if (DEBUG) {
       post("No atom_setsym errors");
