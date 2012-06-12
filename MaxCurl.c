@@ -91,6 +91,7 @@ size_t _maxcurl_callback(void* data, size_t size, size_t nmemb,
 }
 
 void maxcurl_bang(t_maxcurl *x) {
+  // TODO: This isn't doing anything. Make it work with threading
   if (x->is_curling) {
     error("Error: cURL operation in progress");
     return;
