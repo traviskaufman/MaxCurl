@@ -14,8 +14,6 @@
 #include <curl/curl.h>
 #include "ext.h"
 #include "ext_obex.h"
-#include "mc_curl_utils.h"
-
 
 
 /////// MaxCurl Object Interface ///////
@@ -24,7 +22,6 @@
 typedef struct _maxcurl {
 	t_object s_obj; // t_object header
 	char *m_url; // URL that will be cURL'd
-  bool is_curling; // whether or not a cURL operation is taking place
   void *m_outlet; // MaxMSP Outlet
 } t_maxcurl;
 
@@ -59,4 +56,23 @@ void maxcurl_bang(t_maxcurl *mxcrl);
  *    if the request was unsuccessful
  */
 char* _maxcurl_doCurl(char* url);
+
+// "String" struct for cURL
+typedef struct __s {
+  char* buffer;
+  size_t size;
+} t_curl_databuffer;
+
+// "String intialization" method
+void t_curl_databuffer_new(t_curl_databuffer* s);
+
+/**
+ * callback function used by _maxcurl_doCurl. see the libCurl API for more
+ * info on cURL callback functions
+ *
+ * @see _maxcurl_doCurl
+ */
+size_t maxcurl_callback(void* data, size_t size, size_t nmemb,
+                         t_curl_databuffer* userdata);
+
 #endif
