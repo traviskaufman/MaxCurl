@@ -64,7 +64,10 @@ typedef struct __s {
 } t_curl_databuffer;
 
 // "String intialization" method
-void t_curl_databuffer_new(t_curl_databuffer* s);
+void t_curl_databuffer_new(t_curl_databuffer* dbuf);
+
+// Reset the buffer
+void t_curl_databuffer_reset(t_curl_databuffer* dbuf);
 
 /**
  * callback function used by _maxcurl_doCurl. see the libCurl API for more

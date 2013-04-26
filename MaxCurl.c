@@ -69,7 +69,10 @@ char* _maxcurl_doCurl(char *url) {
   if (resp != CURLE_OK)
     error("Curl error %d: %s", resp, curl_error_buffer);
   
+  
+  t_curl_databuffer_reset(&curl_result_buffer);
   resp = curl_easy_perform(curl);
+  
   if (DEBUG && resp != CURLE_OK) {
     error("CURL Error: %s", curl_easy_strerror(resp));
   } else {
@@ -117,6 +120,12 @@ void maxcurl_bang(t_maxcurl *x) {
 void t_curl_databuffer_new(t_curl_databuffer *dbuf) {
   dbuf->size = 0;
   dbuf->buffer = malloc(dbuf->size+1);
+  dbuf->buffer[0] = '\0';
+}
+
+void t_curl_databuffer_reset(t_curl_databuffer *dbuf) {
+  dbuf->buffer = realloc(dbuf->buffer, 1);
+  dbuf->size = 0;
   dbuf->buffer[0] = '\0';
 }
 
