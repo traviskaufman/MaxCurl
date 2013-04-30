@@ -80,16 +80,19 @@ char* _maxcurl_doCurl(char *url) {
   
   // Clean up
   curl_easy_cleanup(curl);
+  char tmp[curl_result_buffer->size];
+  char* res;
+  
   if (resp == CURL_SUCCESS) {
-    char res[curl_result_buffer->size];
-    strcpy(res, curl_result_buffer->buffer);
-    char* real_res = res;
-    t_curl_databuffer_free(curl_result_buffer);
-    return real_res;
+    strcpy(tmp, curl_result_buffer->buffer);
+    res = tmp;
   } else {
-    t_curl_databuffer_free(curl_result_buffer);
-    return NULL;
+    res = NULL;
   }
+  
+  t_curl_databuffer_free(curl_result_buffer);
+  
+  return res;
 }
 
 void maxcurl_bang(t_maxcurl *x) {
