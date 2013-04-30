@@ -39,6 +39,7 @@ void *maxcurl_new(t_symbol* url) {
 
 void maxcurl_free() {
   curl_global_cleanup();
+  class_free(s_maxcurl_class);
 }
 
 char* _maxcurl_doCurl(char *url) {
