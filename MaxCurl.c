@@ -9,14 +9,8 @@
 #include "MaxCurl.h"
 
 // global pointer to our class definition that is set up in main()
-static t_class *s_maxcurl_class; 
-CURL *curl = NULL;
-CURLcode resp = 0;
-const int CURL_SUCCESS = 0;
-char *curl_error_buffer = NULL;
+static t_class *s_maxcurl_class;
 const bool DEBUG = TRUE;
-
-
 
 int main() {
 	t_class *c = NULL;
@@ -48,7 +42,7 @@ void maxcurl_free() {
 }
 
 char* _maxcurl_doCurl(char *url) {
-  curl = curl_easy_init();
+  CURL* curl = curl_easy_init();
   if (!curl) {
     error("cURL Error: Could not set up cURL client");
   }
@@ -57,6 +51,9 @@ char* _maxcurl_doCurl(char *url) {
   if (!curl_result_buffer) {
     error("cURL Error: Could not allocate buffer memory");
   }
+  
+  char *curl_error_buffer = NULL;
+  CURLcode resp = 0;
 
   resp = curl_easy_setopt(curl, CURLOPT_URL, url);
   if (resp != CURLE_OK)
@@ -80,10 +77,11 @@ char* _maxcurl_doCurl(char *url) {
   
   // Clean up
   curl_easy_cleanup(curl);
+  
   char tmp[curl_result_buffer->size];
   char* res;
-  
-  if (resp == CURL_SUCCESS) {
+
+  if (resp == CURLE_OK) {
     strcpy(tmp, curl_result_buffer->buffer);
     res = tmp;
   } else {
@@ -99,15 +97,17 @@ void maxcurl_bang(t_maxcurl *x) {
   if (DEBUG) {
     post("Requested url: %s", x->m_url);
   }
+
   char* crlRes = _maxcurl_doCurl(x->m_url);
   if (DEBUG) {
     post("crlRes: %s", crlRes);
     
   }
+
   t_atom outlet_data[1];
   t_max_err setsym_result = (crlRes != NULL) ? 
-                        atom_setsym(outlet_data, gensym(crlRes)) : 
-                        atom_setsym(outlet_data, gensym("curl error"));
+                                atom_setsym(outlet_data, gensym(crlRes)) :
+                                atom_setsym(outlet_data, gensym("curl error"));
   if (setsym_result == MAX_ERR_NONE) {
     if (DEBUG) {
       post("No atom_setsym errors");
@@ -118,14 +118,6 @@ void maxcurl_bang(t_maxcurl *x) {
     error("%s", setsym_result);
   }
 }
-
-/**
- * @file mc_curl_utils.c
- *
- * mc_curl_utils.h implementation
- *
- * @author Travis Kaufman
- */
 
 t_curl_databuffer* t_curl_databuffer_new(void) {
   t_curl_databuffer* dbuf = malloc(sizeof(t_curl_databuffer));
