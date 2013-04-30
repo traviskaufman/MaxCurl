@@ -111,8 +111,8 @@ void _maxcurl_handle_bang(t_maxcurl* x) {
   
   t_atom outlet_data[1];
   t_max_err setsym_result = (crlRes != NULL) ?
-  atom_setsym(outlet_data, gensym(crlRes)) :
-  atom_setsym(outlet_data, gensym("curl error"));
+                                atom_setsym(outlet_data, gensym(crlRes)) :
+                                atom_setsym(outlet_data, gensym("curl error"));
   if (setsym_result == MAX_ERR_NONE) {
     if (DEBUG) {
       post("No atom_setsym errors");
