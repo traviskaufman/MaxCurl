@@ -64,7 +64,10 @@ typedef struct __s {
 } t_curl_databuffer;
 
 // "String intialization" method
-void t_curl_databuffer_new(t_curl_databuffer* dbuf);
+t_curl_databuffer* t_curl_databuffer_new(void);
+
+// String deallocation method
+void t_curl_databuffer_free(t_curl_databuffer* dbuf);
 
 // Reset the buffer
 void t_curl_databuffer_reset(t_curl_databuffer* dbuf);

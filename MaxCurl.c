@@ -13,7 +13,6 @@ static t_class *s_maxcurl_class;
 CURL *curl = NULL;
 CURLcode resp = 0;
 const int CURL_SUCCESS = 0;
-t_curl_databuffer curl_result_buffer;
 char *curl_error_buffer = NULL;
 const bool DEBUG = TRUE;
 
@@ -40,15 +39,12 @@ void *maxcurl_new(t_symbol* url) {
 	maxcurl_proto->m_url = url->s_name;
   maxcurl_proto->m_outlet = outlet_new(maxcurl_proto, NULL);
   curl_global_init(CURL_GLOBAL_ALL);
-  t_curl_databuffer_new(&curl_result_buffer);
   
 	return maxcurl_proto;
 }
 
 void maxcurl_free() {
   curl_global_cleanup();
-  free(curl_result_buffer.buffer);
-  free(&curl_result_buffer);
 }
 
 char* _maxcurl_doCurl(char *url) {
@@ -56,33 +52,44 @@ char* _maxcurl_doCurl(char *url) {
   if (!curl) {
     error("cURL Error: Could not set up cURL client");
   }
+  
+  t_curl_databuffer* curl_result_buffer = t_curl_databuffer_new();
+  if (!curl_result_buffer) {
+    error("cURL Error: Could not allocate buffer memory");
+  }
+
   resp = curl_easy_setopt(curl, CURLOPT_URL, url);
   if (resp != CURLE_OK)
     error("Curl error %d: %s", resp, curl_error_buffer);
   resp = curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, maxcurl_callback);
   if (resp != CURLE_OK)
     error("Curl error %d: %s", resp, curl_error_buffer);
-  resp = curl_easy_setopt(curl, CURLOPT_WRITEDATA, &curl_result_buffer);
+  resp = curl_easy_setopt(curl, CURLOPT_WRITEDATA, curl_result_buffer);
   if (resp != CURLE_OK)
     error("Curl error %d: %s", resp, curl_error_buffer);
   resp = curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, curl_error_buffer);
   if (resp != CURLE_OK)
     error("Curl error %d: %s", resp, curl_error_buffer);
   
-  
-  t_curl_databuffer_reset(&curl_result_buffer);
   resp = curl_easy_perform(curl);
-  
   if (DEBUG && resp != CURLE_OK) {
     error("CURL Error: %s", curl_easy_strerror(resp));
   } else {
-    post("Done. Data Size: %d.", curl_result_buffer.size);
+    post("Done. Data Size: %d.", curl_result_buffer->size);
   }
+  
+  // Clean up
   curl_easy_cleanup(curl);
   if (resp == CURL_SUCCESS) {
-    return curl_result_buffer.buffer;
+    char res[curl_result_buffer->size];
+    strcpy(res, curl_result_buffer->buffer);
+    char* real_res = res;
+    t_curl_databuffer_free(curl_result_buffer);
+    return real_res;
+  } else {
+    t_curl_databuffer_free(curl_result_buffer);
+    return NULL;
   }
-  return NULL;
 }
 
 void maxcurl_bang(t_maxcurl *x) {
@@ -117,10 +124,21 @@ void maxcurl_bang(t_maxcurl *x) {
  * @author Travis Kaufman
  */
 
-void t_curl_databuffer_new(t_curl_databuffer *dbuf) {
+t_curl_databuffer* t_curl_databuffer_new(void) {
+  t_curl_databuffer* dbuf = malloc(sizeof(t_curl_databuffer));
+  if (dbuf == NULL) {
+    return NULL;
+  }
+
   dbuf->size = 0;
   dbuf->buffer = malloc(dbuf->size+1);
   dbuf->buffer[0] = '\0';
+  return dbuf;
+}
+
+void t_curl_databuffer_free(t_curl_databuffer *dbuf) {
+  free(dbuf->buffer);
+  free(dbuf);
 }
 
 void t_curl_databuffer_reset(t_curl_databuffer *dbuf) {
