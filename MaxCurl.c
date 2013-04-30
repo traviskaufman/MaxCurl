@@ -1,4 +1,3 @@
-
 /**
  * @file MaxCurl.c
  *
@@ -32,14 +31,19 @@ void *maxcurl_new(t_symbol* url) {
   t_maxcurl *maxcurl_proto = (t_maxcurl *)object_alloc(s_maxcurl_class);
 	maxcurl_proto->m_url = url->s_name;
   maxcurl_proto->m_outlet = outlet_new(maxcurl_proto, NULL);
+  maxcurl_proto->m_qelem = qelem_new(
+    (t_object *)maxcurl_proto, (method)_maxcurl_handle_bang
+  );
+
   curl_global_init(CURL_GLOBAL_ALL);
   
 	return maxcurl_proto;
 }
 
-void maxcurl_free() {
+void maxcurl_free(t_maxcurl* x) {
+  qelem_unset(x->m_qelem);
+  qelem_free(x->m_qelem);
   curl_global_cleanup();
-  class_free(s_maxcurl_class);
 }
 
 char* _maxcurl_doCurl(char *url) {
@@ -94,21 +98,22 @@ char* _maxcurl_doCurl(char *url) {
   return res;
 }
 
-void maxcurl_bang(t_maxcurl *x) {
+// This iFace is needed for defer(). s, argc, and argv are not used.
+void _maxcurl_handle_bang(t_maxcurl* x) {
   if (DEBUG) {
     post("Requested url: %s", x->m_url);
   }
-
+  
   char* crlRes = _maxcurl_doCurl(x->m_url);
   if (DEBUG) {
     post("crlRes: %s", crlRes);
     
   }
-
+  
   t_atom outlet_data[1];
-  t_max_err setsym_result = (crlRes != NULL) ? 
-                                atom_setsym(outlet_data, gensym(crlRes)) :
-                                atom_setsym(outlet_data, gensym("curl error"));
+  t_max_err setsym_result = (crlRes != NULL) ?
+  atom_setsym(outlet_data, gensym(crlRes)) :
+  atom_setsym(outlet_data, gensym("curl error"));
   if (setsym_result == MAX_ERR_NONE) {
     if (DEBUG) {
       post("No atom_setsym errors");
@@ -118,6 +123,10 @@ void maxcurl_bang(t_maxcurl *x) {
   else {
     error("%s", setsym_result);
   }
+}
+
+void maxcurl_bang(t_maxcurl *x) {
+  qelem_set(x->m_qelem);
 }
 
 t_curl_databuffer* t_curl_databuffer_new(void) {

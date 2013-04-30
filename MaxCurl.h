@@ -23,6 +23,7 @@ typedef struct _maxcurl {
 	t_object s_obj; // t_object header
 	char *m_url; // URL that will be cURL'd
   void *m_outlet; // MaxMSP Outlet
+  void *m_qelem; // QElem for the curl operation
 } t_maxcurl;
 
 /////// Methods ///////
@@ -80,5 +81,8 @@ void t_curl_databuffer_reset(t_curl_databuffer* dbuf);
  */
 size_t maxcurl_callback(void* data, size_t size, size_t nmemb,
                          t_curl_databuffer* userdata);
+
+// Private
+void _maxcurl_handle_bang(t_maxcurl* x);
 
 #endif
