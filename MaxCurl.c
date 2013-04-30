@@ -98,7 +98,6 @@ char* _maxcurl_doCurl(char *url) {
   return res;
 }
 
-// This iFace is needed for defer(). s, argc, and argv are not used.
 void _maxcurl_handle_bang(t_maxcurl* x) {
   if (DEBUG) {
     post("Requested url: %s", x->m_url);
